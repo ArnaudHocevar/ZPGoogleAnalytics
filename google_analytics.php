@@ -34,6 +34,9 @@ $plugin_version = '4.0-alpha2';
 $plugin_URL = "http://blog.zepsikopat.net/2014/04/24/zenphoto-analytics-plugin-4-0/";
 $option_interface = "GoogleAnalytics";
 
+// Include all the dependencies
+require_once(SERVERPATH . '/' . USER_PLUGIN_FOLDER . '/google_analytics/inc-config.php');
+
 
 zp_register_filter('theme_head', 'GoogleAnalytics::GAinitialize',0);
 zp_register_filter('theme_body_close', 'GoogleAnalytics::GAColorboxHook',0);
@@ -41,119 +44,36 @@ zp_register_filter('theme_body_close', 'GoogleAnalytics::GAColorboxHook',0);
 
 class GoogleAnalytics {
 
-	static $GARateList = array('0 %' => 0,
-		'1 %' => 1,
-		'2 %' => 2,
-		'3 %' => 3,
-		'4 %' => 4,
-		'5 %' => 5,
-		'10 %' => 10,
-		'15 %' => 15,
-		'25 %' => 25,
-		'33 %' => 33,
-		'50 %' => 50,
-		'66 %' => 66,
-		'75 %' => 75,
-		'100 %' => 100);
-		
+	// Constructor: set all the option defaults
 	function GoogleAnalytics() {
-		setOptionDefault('analyticsId', 'UA-xxxxxx-x');
-		setOptionDefault('admintracking', 0);
-		setOptionDefault('domainName', '');
-		setOptionDefault('trackPageLoadSampleRate', '100');
-		setOptionDefault('trackPageLoadSpeedSampleRate', '5');
-		setOptionDefault('anonymizeIp','1');
-		setOptionDefault('trackPageViews','1');
-		setOptionDefault('trackImageViews','1');
-		setOptionDefault('alwaysSendReferrer','1');
-		setOptionDefault('forceSSL','1');
-		setOptionDefault('trackDemographics','0');
-		setOptionDefault('enhancedLink','0');
-	}
+		//$conflist = GAConfig::getConf();
+		foreach (GAConfig::getConf() as $sub) {
+			setOptionDefault($sub['property_name'],$sub['default']);
+			}
+		}
 
+	// Set up configuration options in administration panel
 	function getOptionsSupported() {
-		return array(  gettext('Google Analytics Web Property ID') => array(
-									'order' => 0,
-									'key' => 'analyticsId',
-									'type' => OPTION_TYPE_TEXTBOX,
-									'desc' => gettext("If you're going to be using Google Analytics,").' <a	href="http://www.google.com/analytics/" target="_blank"> '.gettext("get a Web Property ID</a> and enter it here.")
-						),
-						gettext('Enable multiple sub-domain tracking') => array(
-									'order' => 1,
-									'key' => 'domainName',
-									'type' => OPTION_TYPE_TEXTBOX,
-									'desc' => gettext("Specify all domains and subdomains to consider. (separated by comma)")
-						),
-						gettext('Enable Admin tracking') => array (
-									'order' => 2,
-									'key' => 'admintracking',
-									'type' => OPTION_TYPE_CHECKBOX,
-									'desc' => gettext('Controls if you want Google Analytics tracking for users logged in as admin. Default is not selected.')
-						),
-						gettext('Always send referrer') => array (
-									'order' => 3,
-									'key' => 'alwaysSendReferrer',
-									'type' => OPTION_TYPE_CHECKBOX,
-									'desc' => gettext('Forces send of referrer even if coming from a similar domain (useful to track internal links)')
-						),
-						gettext('Enable IP anonymizing') => array (
-									'order' => 4,
-									'key' => 'anonymizeIp',
-									'type' => OPTION_TYPE_CHECKBOX,
-									'desc' => gettext('When present, the IP address of the sender will be anonymized.')
-						),
-						gettext('Force SSL') => array (
-									'order' => 5,
-									'key' => 'forceSSL',
-									'type' => OPTION_TYPE_CHECKBOX,
-									'desc' => gettext('By default, tracking beacons sent from https pages will be sent using https while beacons sent from http pages will be sent using http. Setting forceSSL to true will force http pages to also send all beacons using https.')
-						),
-						gettext('Enable Demographics') => array (
-									'order' => 6,
-									'key' => 'trackDemographics',
-									'type' => OPTION_TYPE_CHECKBOX,
-									'desc' => gettext('Demographics and Interest Reports make Age, Gender, and Interest data available so you can better understand who your users are.')
-						),
-						gettext('Use enhanced link attribution') => array (
-									'order' => 7,
-									'key' => 'enhancedLink',
-									'type' => OPTION_TYPE_CHECKBOX,
-									'desc' => gettext('Enable better tracking of links by Google.')
-						),
-						gettext('Enable page view tracking') => array (
-									'order' => 8,
-									'key' => 'trackPageViews',
-									'type' => OPTION_TYPE_CHECKBOX,
-									'desc' => gettext('Controls if you want Google Analytics to track page views.')
-						),
-						gettext('Enable image view tracking') => array (
-									'order' => 9,
-									'key' => 'trackImageViews',
-									'type' => OPTION_TYPE_CHECKBOX,
-									'desc' => gettext('Controls if you want Google Analytics to track image displayed with colorbox.')
-						),
-						gettext('Page load sample rate') => array (
-									'order' => 10,
-									'key' => 'trackPageLoadSampleRate',
-									'type' => OPTION_TYPE_SELECTOR,
-									'selections' => GoogleAnalytics::$GARateList,
-									'desc' => gettext('Controls the sample rate (i.e. percentage of sampled visits) of the page.')
-						),
-						gettext('Page load speed sample rate') => array (
-									'order' => 11,
-									'key' => 'trackPageLoadSpeedSampleRate',
-									'type' => OPTION_TYPE_SELECTOR,
-									'selections' => GoogleAnalytics::$GARateList,
-									'desc' => gettext('Controls the sample rate of page load speed.')
-						),
-		);
+		$t_arr = array();
+		foreach (GAConfig::getConf() as $sub) {
+			$t_sarr = array(
+				'order' => $sub['option_order'],
+				'key' => $sub['property_name'],
+				'type' => $sub['option_type'],
+				'desc' => $sub['option_desc']
+			);
+			if($sub['option_type'] == OPTION_TYPE_SELECTOR)
+				$t_sarr['selections'] = $sub['option_selections'];
+			$t_arr[$sub['option_header']] = $t_sarr;
+		}
+		return $t_arr;
 	}
 
 	function handleOption($option, $currentValue) {}
 	
 	static function GAinitialize() {
-		$analyticUserId = getOption('analyticsId');
-		if (!empty($analyticUserId) && ((zp_loggedin() && getOption('admintracking')) || !zp_loggedin()) ) {
+	$analyticUserId = getOption(GAConfig::getConfItem('AnalyticsId','property_name'));
+		if (!empty($analyticUserId) && ((zp_loggedin() && getOption('adminTracking')) || !zp_loggedin()) ) {
 			echo "<script type=\"text/javascript\">
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -167,7 +87,7 @@ class GoogleAnalytics {
 	}
 	
 	static function GAColorboxHook() {
-		$analyticUserId = getOption('analyticsId');
+		$analyticUserId = getOption(GAConfig::getConfItem('AnalyticsId','property_name'));
 		if (!empty($analyticUserId) && ((zp_loggedin() && getOption('admintracking')) || !zp_loggedin()) && getOption('trackImageViews') == 1) {
 			echo "<script type=\"text/javascript\">
 	$(document).ready(function () {
@@ -189,7 +109,7 @@ class GoogleAnalytics {
 		else {
 			$alwayssendreferrer = "false";
 			}
-		$analyticUserId = getOption('analyticsId');
+		$analyticUserId = getOption(GAConfig::getConfItem('AnalyticsId','property_name'));
 		$domainListParam = getOption('domainName');
 		if (!empty($analyticUserId) && 
 			((zp_loggedin() && getOption('admintracking')) 
