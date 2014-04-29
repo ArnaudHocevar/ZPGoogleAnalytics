@@ -1,4 +1,5 @@
 <?php
+	require_once('inc-functions.php');
 	/** This class file contains the static values used in the module */
 	class GAConfig {
 		// List of rates used in the drop-down
@@ -36,9 +37,26 @@
 						'option_order' => 1,
 						'option_type' => $const['OPTION_TYPE_TEXTBOX'],
 						'option_desc' => gettext("Specify all domains and subdomains to consider. (separated by comma)"),
+						'ga' => array(
+									array(
+										'ga_category' => 'create',
+										'ga_parameter' => 'allowLinker',
+										'ga_value_type' => 'boolean',
+									),
+									array(
+										'ga_category' => 'require',
+										'ga_parameter' => 'linker',
+										'ga_value_type' => 'none',
+									),
+									array(
+										'ga_category' => 'other',
+										'ga_parameter' => 'linker:autoLink',
+										'ga_value_type' => 'buildLinkerParam',
+									)
+								),
 						),
 					'AdminTrackingEnabled' => array(
-						'default' => self::bool2bin(false),
+						'default' => GAToolbox::bool2bin(false),
 						'property_name' => 'adminTracking',
 						'option_header' => gettext('Enable Admin tracking'),
 						'option_order' => 2,
@@ -46,12 +64,19 @@
 						'option_desc' => gettext('Controls if you want Google Analytics tracking for users logged in as admin. Default is not selected.'),
 						),
 					'AlwaysSendReferrer' => array(
-						'default' => self::bool2bin(false),
+						'default' => GAToolbox::bool2bin(false),
 						'property_name' => 'alwaysSendReferrer',
 						'option_header' => gettext('Always send referrer'),
 						'option_order' => 3,
 						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
 						'option_desc' => gettext('Forces send of referrer even if coming from a similar domain (useful to track internal links)'),
+						'ga' => array(
+									array(
+										'ga_category' => 'create',
+										'ga_parameter' => 'alwaysSendReferrer',
+										'ga_value_type' => 'boolean',
+									)
+								),
 						),
 					'TrackPageLoadingSampleRate' => array(
 						'default' => 100,
@@ -61,6 +86,13 @@
 						'option_type' => $const['OPTION_TYPE_SELECTOR'],
 						'option_selections' => self::$rateList,
 						'option_desc' => gettext('Controls the sample rate (i.e. percentage of sampled visits) of the page.'),
+						'ga' => array(
+									array(
+										'ga_category' => 'create',
+										'ga_parameter' => 'sampleRate',
+										'ga_value_type' => 'numeric',
+									)
+								),
 						),
 					'TrackPageSpeedSampleRate' => array(
 						'default' => 10,
@@ -70,17 +102,31 @@
 						'option_type' =>  $const['OPTION_TYPE_SELECTOR'],
 						'option_selections' => self::$rateList,
 						'option_desc' => gettext('Controls the sample rate of page load speed.'),
+						'ga' => array(
+									array(
+										'ga_category' => 'create',
+										'ga_parameter' => 'siteSpeedSampleRate',
+										'ga_value_type' => 'numeric',
+									)
+							),
 						),
 					'IPAnonymizeEnabled' => array(
-						'default' => self::bool2bin(true),
+						'default' => GAToolbox::bool2bin(true),
 						'property_name' => 'anonymizeIp',
 						'option_header' => gettext('Enable IP anonymizing'),
 						'option_order' => 4,
 						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
 						'option_desc' => gettext('When present, the IP address of the sender will be anonymized.'),
+						'ga' => array(
+									array(
+										'ga_category' => 'set',
+										'ga_parameter' => 'anonymizeIp',
+										'ga_value_type' => 'boolean',
+									)
+							),
 						),
 					'TrackPageViews' => array(
-						'default' => self::bool2bin(true),
+						'default' => GAToolbox::bool2bin(true),
 						'property_name' => 'trackPageViews',
 						'option_header' => gettext('Enable page view tracking'),
 						'option_order' => 8,
@@ -88,7 +134,7 @@
 						'option_desc' => gettext('Controls if you want Google Analytics to track page views.'),
 						),
 					'TrackImageViews' => array(
-						'default' => self::bool2bin(true),
+						'default' => GAToolbox::bool2bin(true),
 						'property_name' => 'trackImageViews',
 						'option_header' => gettext('Enable image view tracking'),
 						'option_order' => 9,
@@ -96,28 +142,50 @@
 						'option_desc' => gettext('Controls if you want Google Analytics to track images shown in colorbox.'),
 						),
 					'ForceSSL' => array(
-						'default' => self::bool2bin(false),
+						'default' => GAToolbox::bool2bin(false),
 						'property_name' => 'forceSSL',
 						'option_header' => gettext('Force SSL'),
 						'option_order' => 5,
 						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
 						'option_desc' => gettext('By default, tracking beacons sent from https pages will be sent using https while beacons sent from http pages will be sent using http. Setting forceSSL to true will force http pages to also send all beacons using https.'),
+						'ga' => array(
+									array(
+										'ga_category' => 'set',
+										'ga_parameter' => 'forceSSL',
+										'ga_value_type' => 'boolean',
+									)
+							),
 						),
 					'TrackDemographics' => array(
-						'default' => self::bool2bin(false),
+						'default' => GAToolbox::bool2bin(false),
 						'property_name' => 'trackDemographics',
 						'option_header' => gettext('Enable Demographics'),
 						'option_order' => 6,
 						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
 						'option_desc' => gettext('Demographics and Interest Reports make Age, Gender, and Interest data available so you can better understand who your users are.'),
+						'ga' => array(
+									array(
+										'ga_category' => 'require',
+										'ga_parameter' => 'displayfeatures',
+										'ga_value_type' => 'none',
+									)
+							),
 						),
 					'UseEnhancedLinks' => array(
-						'default' => self::bool2bin(false),
+						'default' => GAToolbox::bool2bin(false),
 						'property_name' => 'enhancedLink',
 						'option_header' => gettext('Use enhanced link attribution'),
 						'option_order' => 7,
 						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
 						'option_desc' => gettext('Enable better tracking of links by Google.'),
+						'ga' => array(
+									array(
+										'ga_category' => 'require',
+										'ga_parameter' => 'linkid',
+										'ga_value_type' => 'list',
+										'ga_value' => array('linkid.js'),
+									)
+							),
 						),
 					);
 				}
@@ -134,42 +202,6 @@
 		
 		function GAConfig() {}
 		
-		/**
-		* Checks the validity of the Google Analytics identifier
-		*
-		* @return boolean true for a valid pattern
-		*/
-		public static function validateAnalyticsId($aid) {
-			if(preg_match('/^UA-[0-9]{6}-[0-9]$/', $aid))
-				return true;
-			else
-				return false;
-		}
 		
-		/**
-		* Checks the validity of a rate
-		*
-		* @return boolean true for a valid rate (in [0,100])
-		*/
-		public static function validateRate($rval) {
-			if(is_numeric($rval) && 0 <= intval($rval) && intval($rval) <= 100)
-				return true;
-			else
-				return false;
-		}
-		
-		public static function bin2bool($input) {
-			if($input == 1)
-				return true;
-			else
-				return false;
-		}
-		
-		public static function bool2bin($input) {
-			if(!empty($input) && $input)
-				return 1;
-			else
-				return 0;
-		}
 	}
 ?>

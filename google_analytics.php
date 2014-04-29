@@ -35,6 +35,7 @@ $plugin_URL = "http://blog.zepsikopat.net/2014/04/24/zenphoto-analytics-plugin-4
 $option_interface = "GoogleAnalytics";
 
 // Include all the dependencies
+require_once(SERVERPATH . '/' . USER_PLUGIN_FOLDER . '/google_analytics/inc-functions.php');
 require_once(SERVERPATH . '/' . USER_PLUGIN_FOLDER . '/google_analytics/inc-config.php');
 
 
@@ -45,7 +46,7 @@ zp_register_filter('theme_body_close', 'GoogleAnalytics::GAColorboxHook',0);
 class GoogleAnalytics {
 
 	// Constructor: set all the option defaults
-	function GoogleAnalytics() {
+	public function GoogleAnalytics() {
 		//$conflist = GAConfig::getConf();
 		foreach (GAConfig::getConf() as $sub) {
 			setOptionDefault($sub['property_name'],$sub['default']);
@@ -53,7 +54,7 @@ class GoogleAnalytics {
 		}
 
 	// Set up configuration options in administration panel
-	function getOptionsSupported() {
+	public function getOptionsSupported() {
 		$t_arr = array();
 		foreach (GAConfig::getConf() as $sub) {
 			$t_sarr = array(
@@ -71,24 +72,31 @@ class GoogleAnalytics {
 
 	function handleOption($option, $currentValue) {}
 	
-	static function GAinitialize() {
-	$analyticUserId = getOption(GAConfig::getConfItem('AnalyticsId','property_name'));
-		if (!empty($analyticUserId) && ((zp_loggedin() && getOption('adminTracking')) || !zp_loggedin()) ) {
+	public static function GAinitialize() {
+		// Only enable analytics if a valid UA identifier is available
+		if(GAToolbox::validateAnalyticsId(getOption(GAConfig::getConfItem('AnalyticsId','property_name')))
+				&& ((zp_loggedin() && getOption('adminTracking')) 
+						|| !zp_loggedin()) ) {
+			// Analytics JS header
 			echo "<script type=\"text/javascript\">
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');\n";
 	
-			GoogleAnalytics::printGAOptions();
+			// Analytics set up script
+			self::printGAOptions();
 		
 			echo "</script>\n";
 		}
 	}
 	
-	static function GAColorboxHook() {
-		$analyticUserId = getOption(GAConfig::getConfItem('AnalyticsId','property_name'));
-		if (!empty($analyticUserId) && ((zp_loggedin() && getOption('admintracking')) || !zp_loggedin()) && getOption('trackImageViews') == 1) {
+	public static function GAColorboxHook() {
+		// Only enable analytics if a valid UA identifier is available AND we want to track image view
+		if(GAToolbox::validateAnalyticsId(getOption(GAConfig::getConfItem('AnalyticsId','property_name')))
+				&& ((zp_loggedin() && getOption('adminTracking')) 
+						|| !zp_loggedin()) 
+				&& getOption(GAConfig::getConfItem('TrackImageViews','property_name')) == 1) {
 			echo "<script type=\"text/javascript\">
 	$(document).ready(function () {
 		$(document).bind('cbox_complete', function(){
@@ -102,27 +110,14 @@ class GoogleAnalytics {
 		}
 	}
 	
-	static function printGAOptions() {
-		if (getOption('alwaysSendReferrer') == 1) {
-			$alwayssendreferrer = "true";
-			}
-		else {
-			$alwayssendreferrer = "false";
-			}
+	private static function printGAOptions() {
 		$analyticUserId = getOption(GAConfig::getConfItem('AnalyticsId','property_name'));
 		$domainListParam = getOption('domainName');
 		if (!empty($analyticUserId) && 
 			((zp_loggedin() && getOption('admintracking')) 
 				|| !zp_loggedin())) {
 			/* Initialisation of tracking code */
-			echo "    ga('create', '" . $analyticUserId . "', 'auto', {" .
-				"'sampleRate': " . getOption('trackPageLoadSampleRate') . ", " .
-				"'siteSpeedSampleRate': " . getOption('trackPageLoadSpeedSampleRate') . ", " .
-				"'alwaysSendReferrer': " . $alwayssendreferrer . ", ";
-			if(!empty($domainListParam)) {
-				echo "'allowLinker': true,";
-				}
-			echo "});\n";
+			echo "    ga('create', '" . $analyticUserId . "', 'auto', {" . GAToolbox::buildCreateParams() ."});\n";
 				
 				/* Additional options */
 			if(getOption('trackDemographics') == 1) {
