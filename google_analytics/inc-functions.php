@@ -26,7 +26,7 @@
 		}
 		
 		public static function bin2bool($input) {
-			if($input == 0)
+			if($input == 0 && strlen($input) <= 1)
 				return false;
 			else
 				return true;
@@ -62,6 +62,54 @@
 							}	
 							// Append to parameter array
 							$t_param .= "'".$p_confitem_ga['ga_parameter']."': ".$t_normalized_param.", ";
+						}
+					}
+				}
+			}
+			return $t_param;
+		}
+		
+		public static function buildAdditionalParams($cat) {
+			$t_param = '';
+			foreach(GAConfig::getConf() as $p_confitem) {
+				if(array_key_exists('ga', $p_confitem)) {
+					foreach($p_confitem['ga'] as $p_confitem_ga) {
+						if(array_key_exists('ga_category', $p_confitem_ga) && $p_confitem_ga['ga_category'] == $cat) {
+							// Convert some datatypes if needed
+							switch($p_confitem_ga['ga_value_type']) {
+								case 'numeric':
+									$t_normalized_param = intval(getOption($p_confitem['property_name']));
+									break;
+								case 'boolean':
+									if(self::bin2bool(getOption($p_confitem['property_name'])))
+										$t_normalized_param = 'true';
+									else
+										$t_normalized_param = 'false';
+									break;
+								case 'list': // Simply implode list to a string
+									$t_normalized_param = implode(', ', $p_confitem_ga['ga_value']);
+									break;
+								case 'callback':
+									// by default, pass configuration value as parameter
+									if(!array_key_exists('ga_callback_parameter', $p_confitem_ga) ^ $p_confitem_ga['ga_callback_parameter'] == NULL)
+										$t_normalized_param = call_user_func_array( 'GAConfig::'.$p_confitem_ga['ga_callback_name'] , array(getOption($p_confitem['property_name']) ));
+									else
+										$t_normalized_param = call_user_func_array( $p_confitem_ga['ga_callback_name'] , $p_confitem_ga['ga_callback_parameter'] );
+									break;
+								default:
+									$t_normalized_param = "'".getOption($p_confitem['property_name'])."'";
+									break;
+							}
+							// Exception rule: if ga_value_type is set to 'none' or 'callback', we only append the output if a content is filled
+							if($p_confitem_ga['ga_category'] == 'other')
+								$t_param .= "    ga('" . $p_confitem_ga['ga_parameter']."', " . $t_normalized_param . ")\n";
+							elseif($p_confitem_ga['ga_value_type'] == 'none'
+								&& (strlen(getOption($p_confitem['property_name'])) > 0 
+									|| self::bin2bool(getOption($p_confitem['property_name']))))
+								$t_param .= "    ga('" . $p_confitem_ga['ga_category'] . "', '" . $p_confitem_ga['ga_parameter'] ."')\n";
+							elseif ($p_confitem_ga['ga_value_type'] != 'none'
+									&& $p_confitem_ga['ga_value_type'] != 'callback')
+								$t_param .= "    ga('" . $p_confitem_ga['ga_category'] . "', '" . $p_confitem_ga['ga_parameter']."', " . $t_normalized_param . ")\n";
 						}
 					}
 				}

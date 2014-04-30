@@ -51,7 +51,9 @@
 									array(
 										'ga_category' => 'other',
 										'ga_parameter' => 'linker:autoLink',
-										'ga_value_type' => 'buildLinkerParam',
+										'ga_value_type' => 'callback',
+										'ga_callback_name' => 'buildLinkerParam',
+										'ga_callback_parameter' => null,
 									)
 								),
 						),
@@ -183,7 +185,7 @@
 										'ga_category' => 'require',
 										'ga_parameter' => 'linkid',
 										'ga_value_type' => 'list',
-										'ga_value' => array('linkid.js'),
+										'ga_value' => array("'linkid.js'"),
 									)
 							),
 						),
@@ -200,8 +202,17 @@
 				return $confItem[$key][$sub];
 			}
 		
+		public static function buildLinkerParam($domainListParam) {
+			$tok = strtok($domainListParam, " ,");
+				$domainList = "";
+				while ($tok !== false) {
+					if(!empty($tok))
+						$domainList .= "'" . $tok . "', ";
+						$tok = strtok(" ,");
+					}
+			return "[ " . $domainList . "], false, true";
+			}
+		
 		function GAConfig() {}
-		
-		
-	}
+		}
 ?>
