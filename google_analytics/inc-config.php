@@ -14,11 +14,13 @@
 					$const['OPTION_TYPE_TEXTBOX'] = OPTION_TYPE_TEXTBOX;
 					$const['OPTION_TYPE_CHECKBOX'] = OPTION_TYPE_CHECKBOX;
 					$const['OPTION_TYPE_SELECTOR'] = OPTION_TYPE_SELECTOR;
+					$const['OPTION_TYPE_RADIO'] = OPTION_TYPE_RADIO;
 					}
 				else {
 					$const['OPTION_TYPE_TEXTBOX'] = 0;
 					$const['OPTION_TYPE_CHECKBOX'] = 1;
 					$const['OPTION_TYPE_SELECTOR'] = 2;
+					$const['OPTION_TYPE_RADIO'] = 1;
 					}
 				// Definition of all the properties
 				self::$conf = array (
@@ -51,9 +53,7 @@
 									array(
 										'ga_category' => 'other',
 										'ga_parameter' => 'linker:autoLink',
-										'ga_value_type' => 'callback',
-										'ga_callback_name' => 'buildLinkerParam',
-										'ga_callback_parameter' => null,
+										'ga_value_type' => 'buildLinkerParam',
 									)
 								),
 						),
@@ -65,11 +65,53 @@
 						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
 						'option_desc' => gettext('Controls if you want Google Analytics tracking for users logged in as admin. Default is not selected.'),
 						),
+					'TrackPageViews' => array(
+						'default' => GAToolbox::bool2bin(true),
+						'property_name' => 'trackPageViews',
+						'option_header' => gettext('Enable page view tracking'),
+						'option_order' => 3,
+						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
+						'option_desc' => gettext('Controls if you want Google Analytics to track page views.'),
+						),
+					'TrackPageViewsPosition' => array(
+						'default' => 'theme_head',
+						'property_name' => 'trackPageViewsPosition',
+						'option_header' => gettext('Page tracking code position'),
+						'option_order' => 4,
+						'option_type' => $const['OPTION_TYPE_RADIO'],
+						'option_button' => array(
+								gettext('HTML header') => 'theme_head',
+								gettext('HTML body opening') => 'theme_body_open',
+								gettext('HTML body closing') => 'theme_body_close',
+								),
+						'option_desc' => gettext('Select where the GA page tracking code should be inserted.'),
+						),
+					'TrackImageViews' => array(
+						'default' => GAToolbox::bool2bin(true),
+						'property_name' => 'trackImageViews',
+						'option_header' => gettext('Enable image view tracking'),
+						'option_order' => 5,
+						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
+						'option_desc' => gettext('Controls if you want Google Analytics to track images shown in colorbox.'),
+						),
+					'TrackImageViewsPosition' => array(
+						'default' => 'theme_body_close',
+						'property_name' => 'trackImageViewsPosition',
+						'option_header' => gettext('Image tracking code position'),
+						'option_order' => 6,
+						'option_type' => $const['OPTION_TYPE_RADIO'],
+						'option_button' => array(
+								gettext('HTML header') => 'theme_head',
+								gettext('HTML body opening') => 'theme_body_open',
+								gettext('HTML body closing') => 'theme_body_close',
+								),
+						'option_desc' => gettext('Select where the GA image tracking code should be inserted.'),
+						),						
 					'AlwaysSendReferrer' => array(
 						'default' => GAToolbox::bool2bin(false),
 						'property_name' => 'alwaysSendReferrer',
 						'option_header' => gettext('Always send referrer'),
-						'option_order' => 3,
+						'option_order' => 7,
 						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
 						'option_desc' => gettext('Forces send of referrer even if coming from a similar domain (useful to track internal links)'),
 						'ga' => array(
@@ -84,7 +126,7 @@
 						'default' => 100,
 						'property_name' => 'trackPageLoadSampleRate',
 						'option_header' => gettext('Page load sample rate'),
-						'option_order' => 10,
+						'option_order' => 12,
 						'option_type' => $const['OPTION_TYPE_SELECTOR'],
 						'option_selections' => self::$rateList,
 						'option_desc' => gettext('Controls the sample rate (i.e. percentage of sampled visits) of the page.'),
@@ -100,7 +142,7 @@
 						'default' => 10,
 						'property_name' => 'trackPageLoadSpeedSampleRate',
 						'option_header' => gettext('Page load speed sample rate'),
-						'option_order' => 11,
+						'option_order' => 13,
 						'option_type' =>  $const['OPTION_TYPE_SELECTOR'],
 						'option_selections' => self::$rateList,
 						'option_desc' => gettext('Controls the sample rate of page load speed.'),
@@ -116,7 +158,7 @@
 						'default' => GAToolbox::bool2bin(true),
 						'property_name' => 'anonymizeIp',
 						'option_header' => gettext('Enable IP anonymizing'),
-						'option_order' => 4,
+						'option_order' => 8,
 						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
 						'option_desc' => gettext('When present, the IP address of the sender will be anonymized.'),
 						'ga' => array(
@@ -127,27 +169,13 @@
 									)
 							),
 						),
-					'TrackPageViews' => array(
-						'default' => GAToolbox::bool2bin(true),
-						'property_name' => 'trackPageViews',
-						'option_header' => gettext('Enable page view tracking'),
-						'option_order' => 8,
-						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
-						'option_desc' => gettext('Controls if you want Google Analytics to track page views.'),
-						),
-					'TrackImageViews' => array(
-						'default' => GAToolbox::bool2bin(true),
-						'property_name' => 'trackImageViews',
-						'option_header' => gettext('Enable image view tracking'),
-						'option_order' => 9,
-						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
-						'option_desc' => gettext('Controls if you want Google Analytics to track images shown in colorbox.'),
-						),
+					
+					
 					'ForceSSL' => array(
 						'default' => GAToolbox::bool2bin(false),
 						'property_name' => 'forceSSL',
 						'option_header' => gettext('Force SSL'),
-						'option_order' => 5,
+						'option_order' => 9,
 						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
 						'option_desc' => gettext('By default, tracking beacons sent from https pages will be sent using https while beacons sent from http pages will be sent using http. Setting forceSSL to true will force http pages to also send all beacons using https.'),
 						'ga' => array(
@@ -162,7 +190,7 @@
 						'default' => GAToolbox::bool2bin(false),
 						'property_name' => 'trackDemographics',
 						'option_header' => gettext('Enable Demographics'),
-						'option_order' => 6,
+						'option_order' => 10,
 						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
 						'option_desc' => gettext('Demographics and Interest Reports make Age, Gender, and Interest data available so you can better understand who your users are.'),
 						'ga' => array(
@@ -177,7 +205,7 @@
 						'default' => GAToolbox::bool2bin(false),
 						'property_name' => 'enhancedLink',
 						'option_header' => gettext('Use enhanced link attribution'),
-						'option_order' => 7,
+						'option_order' => 11,
 						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
 						'option_desc' => gettext('Enable better tracking of links by Google.'),
 						'ga' => array(
@@ -185,7 +213,7 @@
 										'ga_category' => 'require',
 										'ga_parameter' => 'linkid',
 										'ga_value_type' => 'list',
-										'ga_value' => array("'linkid.js'"),
+										'ga_value' => array('linkid.js'),
 									)
 							),
 						),
@@ -202,17 +230,8 @@
 				return $confItem[$key][$sub];
 			}
 		
-		public static function buildLinkerParam($domainListParam) {
-			$tok = strtok($domainListParam, " ,");
-				$domainList = "";
-				while ($tok !== false) {
-					if(!empty($tok))
-						$domainList .= "'" . $tok . "', ";
-						$tok = strtok(" ,");
-					}
-			return "[ " . $domainList . "], false, true";
-			}
-		
 		function GAConfig() {}
-		}
+		
+		
+	}
 ?>
