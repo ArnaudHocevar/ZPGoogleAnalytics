@@ -102,7 +102,7 @@ class GoogleAnalytics {
 			((zp_loggedin() && getOption('admintracking')) 
 				|| !zp_loggedin())) {
 			/* Initialisation of tracking code */
-			echo "    ga('create', '" . $analyticUserId . "', 'auto', {" . GAToolbox::buildCreateParams() ."});\n";
+			echo "    ga('create', '" . $analyticUserId . "', {" . GAToolbox::buildCreateParams() ."});\n";
 				
 				/* Additional options */
 			if(getOption('trackDemographics') == 1) {
