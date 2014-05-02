@@ -7,6 +7,7 @@
  * @author Arnaud Hocevar starting 3.0.0
  * @version 4.0
  * @package plugins
+ * @subpackage misc
  */
 
 $plugin_is_filter = THEME_PLUGIN;
@@ -70,8 +71,18 @@ class GoogleAnalytics {
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');\n";
 	
 			// Analytics set up script
-			self::printGAOptions();
-		
+			echo "    ga('create', '" . getOption(GAConfig::getConfItem('AnalyticsId','property_name')) . "', 'auto', {" . GAToolbox::buildCreateParams() ."});\n";
+			
+			echo GAToolbox::buildAdditionalParams('require') ."\n";
+			echo GAToolbox::buildAdditionalParams('other') ."\n";
+			echo GAToolbox::buildAdditionalParams('set') ."\n";
+			
+			if(getOption(GAConfig::getConfItem('TrackSearchKeywords','property_name')) == 1
+				&& GAToolbox::searchEnabled())
+				echo "    ga('send', 'pageview', '/page/search?" . GAToolbox::searchURL() . "');\n";
+			else
+				if(getOption(GAConfig::getConfItem('TrackPageViews','property_name')) == 1)
+					echo "    ga('send', 'pageview');\n";
 			echo "</script>\n";
 		}
 	}
@@ -94,44 +105,6 @@ class GoogleAnalytics {
 	</script>\n";
 		}
 	}
-	
-	private static function printGAOptions() {
-		$analyticUserId = getOption(GAConfig::getConfItem('AnalyticsId','property_name'));
-		$domainListParam = getOption('domainName');
-		if (!empty($analyticUserId) && 
-			((zp_loggedin() && getOption('admintracking')) 
-				|| !zp_loggedin())) {
-			/* Initialisation of tracking code */
-			echo "    ga('create', '" . $analyticUserId . "', 'auto', {" . GAToolbox::buildCreateParams() ."});\n";
-				
-				/* Additional options */
-			if(getOption('trackDemographics') == 1) {
-				echo "    ga('require', 'displayfeatures');\n";
-			}
-			if(getOption('enhancedLink') == 1) {
-				echo "    ga('require', 'linkid', 'linkid.js');\n";
-				}
-			if(!empty($domainListParam)) {
-				echo "    ga('require', 'linker');\n";
-				$tok = strtok($domainListParam, " ,");
-				$domainList = "";
-				while ($tok !== false) {
-					if(!empty($tok))
-						$domainList = $domainList . "'" . $tok . "', ";
-						$tok = strtok(" ,");
-					}
-				echo "    ga('linker:autoLink', [" . $domainList . "], false, true);\n";
-				}
-			if(getOption('anonymizeIp') == 1) {
-				echo "    ga('set', 'anonymizeIp', true);\n";
-				}
-			if(getOption('forceSSL') == 1) {
-				echo "    ga('set', 'forceSSL', true);\n";
-			}
-			if(getOption('trackPageViews') == 1) {
-				echo "    ga('send', 'pageview');\n";
-				}
-		}
-}
+
 }
 ?>

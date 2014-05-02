@@ -40,7 +40,6 @@
 		}
 		
 		public static function buildCreateParams() {
-			$t_param = '';
 			foreach(GAConfig::getConf() as $p_confitem) {
 				if(array_key_exists('ga', $p_confitem)) {
 					foreach($p_confitem['ga'] as $p_confitem_ga) {
@@ -61,16 +60,15 @@
 									break;
 							}	
 							// Append to parameter array
-							$t_param .= "'".$p_confitem_ga['ga_parameter']."': ".$t_normalized_param.", ";
+							$t_param[] = "'".$p_confitem_ga['ga_parameter']."': ".$t_normalized_param;
 						}
 					}
 				}
 			}
-			return $t_param;
+			return  implode(',',array_values($t_param));
 		}
 		
 		public static function buildAdditionalParams($cat) {
-			$t_param = '';
 			foreach(GAConfig::getConf() as $p_confitem) {
 				if(array_key_exists('ga', $p_confitem)) {
 					foreach($p_confitem['ga'] as $p_confitem_ga) {
@@ -102,19 +100,38 @@
 							}
 							// Exception rule: if ga_value_type is set to 'none' or 'callback', we only append the output if a content is filled
 							if($p_confitem_ga['ga_category'] == 'other')
-								$t_param .= "    ga('" . $p_confitem_ga['ga_parameter']."', " . $t_normalized_param . ")\n";
+								$t_param[] = "    ga('" . $p_confitem_ga['ga_parameter']."', " . $t_normalized_param . ");";
 							elseif($p_confitem_ga['ga_value_type'] == 'none'
 								&& (strlen(getOption($p_confitem['property_name'])) > 0 
 									|| self::bin2bool(getOption($p_confitem['property_name']))))
-								$t_param .= "    ga('" . $p_confitem_ga['ga_category'] . "', '" . $p_confitem_ga['ga_parameter'] ."')\n";
+								$t_param[] = "    ga('" . $p_confitem_ga['ga_category'] . "', '" . $p_confitem_ga['ga_parameter'] ."');";
 							elseif ($p_confitem_ga['ga_value_type'] != 'none'
 									&& $p_confitem_ga['ga_value_type'] != 'callback')
-								$t_param .= "    ga('" . $p_confitem_ga['ga_category'] . "', '" . $p_confitem_ga['ga_parameter']."', " . $t_normalized_param . ")\n";
+								$t_param[] = "    ga('" . $p_confitem_ga['ga_category'] . "', '" . $p_confitem_ga['ga_parameter']."', " . $t_normalized_param . ");";
 						}
 					}
 				}
 			}
-			return $t_param;
+			return implode("\n",array_values($t_param));
+		}
+		
+		public static function searchEnabled() {
+			$r = trim(zp_getCookie('zenphoto_search_params'));
+			return !empty($r);
+			}
+			
+		public static function searchURL() {
+			parse_str(trim(zp_getCookie('zenphoto_search_params')), $q);
+			$w = '';
+			$f = '';
+			if(array_key_exists('words',$q)) {
+				$w = implode("+",array_filter(array_unique(preg_split('/[()\ ]|AND|OR|XOR/',$q['words']))));
+				if(array_key_exists('searchfields',$q))
+					$f = implode("+",array_filter(array_unique(preg_split('/[,\ ]/',$q['searchfields']))));
+				else // Quickfix for "all" keyword
+					$f = "all";
+				}
+			return "q=" .$w . "&c=" .$f;
 		}
 	}
 ?>
