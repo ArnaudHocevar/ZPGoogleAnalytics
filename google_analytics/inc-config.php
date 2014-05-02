@@ -213,7 +213,7 @@
 										'ga_category' => 'require',
 										'ga_parameter' => 'linkid',
 										'ga_value_type' => 'list',
-										'ga_value' => array('linkid.js'),
+										'ga_value' => array("'linkid.js'"),
 									)
 							),
 						),
