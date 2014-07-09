@@ -9,7 +9,7 @@
  * @package plugins
  */
 
-$plugin_is_filter = THEME_PLUGIN;
+$plugin_is_filter = 5 | THEME_PLUGIN | ADMIN_PLUGIN;
 $plugin_description = gettext("Support for providing Google Analytics tracking");
 $plugin_author = 'Arnaud Hocevar (original plugin from Jeff Smith)';
 $plugin_version = '4.0';
