@@ -87,7 +87,7 @@ class GoogleAnalytics {
 		$(document).bind('cbox_complete', function(){
 			var href = this.href;
 			if (href) {
-				ga('send', 'pageview', href]);
+				ga('send', 'pageview', href);
 			}
 		});
 	});
