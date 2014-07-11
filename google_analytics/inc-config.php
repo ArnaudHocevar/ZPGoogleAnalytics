@@ -74,8 +74,8 @@
 						'option_desc' => gettext('Controls if you want Google Analytics to track page views.'),
 						),
 					'TrackPageViewsPosition' => array(
-						'default' => 'zp_google_analytics_theme_head',
-						'property_name' => 'trackPageViewsPosition',
+						'default' => 'theme_head',
+						'property_name' => 'zp_google_analytics_trackPageViewsPosition',
 						'option_header' => gettext('Page tracking code position'),
 						'option_order' => 4,
 						'option_type' => $const['OPTION_TYPE_RADIO'],
@@ -95,8 +95,8 @@
 						'option_desc' => gettext('Controls if you want Google Analytics to track images shown in colorbox.'),
 						),
 					'TrackImageViewsPosition' => array(
-						'default' => 'zp_google_analytics_theme_body_close',
-						'property_name' => 'trackImageViewsPosition',
+						'default' => 'theme_body_close',
+						'property_name' => 'zp_google_analytics_trackImageViewsPosition',
 						'option_header' => gettext('Image tracking code position'),
 						'option_order' => 6,
 						'option_type' => $const['OPTION_TYPE_RADIO'],
