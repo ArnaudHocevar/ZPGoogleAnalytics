@@ -26,7 +26,7 @@
 				self::$conf = array (
 					'AnalyticsId' => array(
 						'default' => 'UA-xxxxxx-x',
-						'property_name' => 'analyticsId',
+						'property_name' => 'zp_google_analytics_analyticsId',
 						'option_header' => gettext('Google Analytics Web Property ID'),
 						'option_order' => 0,
 						'option_type' => $const['OPTION_TYPE_TEXTBOX'],
@@ -34,7 +34,7 @@
 						),
 					'DomainNameList' => array(
 						'default' => '',
-						'property_name' => 'domainName',
+						'property_name' => 'zp_google_analytics_domainName',
 						'option_header' => gettext('Enable multiple sub-domain tracking'),
 						'option_order' => 1,
 						'option_type' => $const['OPTION_TYPE_TEXTBOX'],
@@ -59,7 +59,7 @@
 						),
 					'AdminTrackingEnabled' => array(
 						'default' => GAToolbox::bool2bin(false),
-						'property_name' => 'adminTracking',
+						'property_name' => 'zp_google_analytics_adminTracking',
 						'option_header' => gettext('Enable Admin tracking'),
 						'option_order' => 2,
 						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
@@ -67,14 +67,14 @@
 						),
 					'TrackPageViews' => array(
 						'default' => GAToolbox::bool2bin(true),
-						'property_name' => 'trackPageViews',
+						'property_name' => 'zp_google_analytics_trackPageViews',
 						'option_header' => gettext('Enable page view tracking'),
 						'option_order' => 3,
 						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
 						'option_desc' => gettext('Controls if you want Google Analytics to track page views.'),
 						),
 					'TrackPageViewsPosition' => array(
-						'default' => 'theme_head',
+						'default' => 'zp_google_analytics_theme_head',
 						'property_name' => 'trackPageViewsPosition',
 						'option_header' => gettext('Page tracking code position'),
 						'option_order' => 4,
@@ -88,14 +88,14 @@
 						),
 					'TrackImageViews' => array(
 						'default' => GAToolbox::bool2bin(true),
-						'property_name' => 'trackImageViews',
+						'property_name' => 'zp_google_analytics_trackImageViews',
 						'option_header' => gettext('Enable image view tracking'),
 						'option_order' => 5,
 						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
 						'option_desc' => gettext('Controls if you want Google Analytics to track images shown in colorbox.'),
 						),
 					'TrackImageViewsPosition' => array(
-						'default' => 'theme_body_close',
+						'default' => 'zp_google_analytics_theme_body_close',
 						'property_name' => 'trackImageViewsPosition',
 						'option_header' => gettext('Image tracking code position'),
 						'option_order' => 6,
@@ -109,7 +109,7 @@
 						),						
 					'AlwaysSendReferrer' => array(
 						'default' => GAToolbox::bool2bin(false),
-						'property_name' => 'alwaysSendReferrer',
+						'property_name' => 'zp_google_analytics_alwaysSendReferrer',
 						'option_header' => gettext('Always send referrer'),
 						'option_order' => 7,
 						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
@@ -124,7 +124,7 @@
 						),
 					'TrackPageLoadingSampleRate' => array(
 						'default' => 100,
-						'property_name' => 'trackPageLoadSampleRate',
+						'property_name' => 'zp_google_analytics_trackPageLoadSampleRate',
 						'option_header' => gettext('Page load sample rate'),
 						'option_order' => 12,
 						'option_type' => $const['OPTION_TYPE_SELECTOR'],
@@ -140,7 +140,7 @@
 						),
 					'TrackPageSpeedSampleRate' => array(
 						'default' => 10,
-						'property_name' => 'trackPageLoadSpeedSampleRate',
+						'property_name' => 'zp_google_analytics_trackPageLoadSpeedSampleRate',
 						'option_header' => gettext('Page load speed sample rate'),
 						'option_order' => 13,
 						'option_type' =>  $const['OPTION_TYPE_SELECTOR'],
@@ -156,7 +156,7 @@
 						),
 					'IPAnonymizeEnabled' => array(
 						'default' => GAToolbox::bool2bin(true),
-						'property_name' => 'anonymizeIp',
+						'property_name' => 'zp_google_analytics_anonymizeIp',
 						'option_header' => gettext('Enable IP anonymizing'),
 						'option_order' => 8,
 						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
@@ -173,7 +173,7 @@
 					
 					'ForceSSL' => array(
 						'default' => GAToolbox::bool2bin(false),
-						'property_name' => 'forceSSL',
+						'property_name' => 'zp_google_analytics_forceSSL',
 						'option_header' => gettext('Force SSL'),
 						'option_order' => 9,
 						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
@@ -188,7 +188,7 @@
 						),
 					'TrackDemographics' => array(
 						'default' => GAToolbox::bool2bin(false),
-						'property_name' => 'trackDemographics',
+						'property_name' => 'zp_google_analytics_trackDemographics',
 						'option_header' => gettext('Enable Demographics'),
 						'option_order' => 10,
 						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
@@ -203,7 +203,7 @@
 						),
 					'UseEnhancedLinks' => array(
 						'default' => GAToolbox::bool2bin(false),
-						'property_name' => 'enhancedLink',
+						'property_name' => 'zp_google_analytics_enhancedLink',
 						'option_header' => gettext('Use enhanced link attribution'),
 						'option_order' => 11,
 						'option_type' => $const['OPTION_TYPE_CHECKBOX'],
