@@ -1,0 +1,263 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ZP Google Analytics\n"
+"POT-Creation-Date: 2014-07-11 15:03+0100\n"
+"PO-Revision-Date: 2014-07-11 15:54+0100\n"
+"Last-Translator: Arnaud Hocevar <arnaud@hocevar.net>\n"
+"Language-Team: \n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.6\n"
+"X-Poedit-Basepath: D:\\pk896\\Documents\\GitHub\\ZPGoogleAnalytics\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Poedit-KeywordsList: gettext_pl\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: google_analytics\n"
+
+#: google_analytics.php:13
+#, fuzzy
+msgid "Support for providing Google Analytics tracking"
+msgstr "Support for providing Google Analytics tracking"
+
+#: google_analytics/inc-config.php:30
+msgid "Universal Analytics Web Property ID"
+msgstr "Identifiant Universal Analytics"
+
+#: google_analytics/inc-config.php:33
+msgid "Please enter your Universal Analytics Web Property identifier."
+msgstr "Veuillez saisir votre identifiant Universal Analytics."
+
+#: google_analytics/inc-config.php:34
+msgid ""
+"If you do not have one, you can create an account for free on <a href="
+"\"http://www.google.com/analytics/\" target=\"_blank\">the Universal "
+"Analytics website</a> and enter it here."
+msgstr ""
+"Si vous n'en possédez pas, vous pouvez facilement et gratuitement créer un "
+"compte à <a href=\"http://www.google.com/analytics/\" target=\"_blank\">the "
+"Universal Analytics website</a> et  le saisir ici ensuite."
+
+#: google_analytics/inc-config.php:39
+msgid "Enable tracking of multiple sub-domain"
+msgstr "Activer le suivi des visiteurs sur plusieurs domaines."
+
+#: google_analytics/inc-config.php:42
+msgid ""
+"If your gallery can be accessed by multiple addresses, and you want to track "
+"your users regardless of the inbound domain, fill the list of domains to be "
+"linked (comma-separated)."
+msgstr ""
+"Si votre galerie peut être accédée depuis plusieurs domaines, et que vous "
+"souhaitez considérer vos visiteurs de manière unique peu importe le domaine "
+"visité, renseignez la liste des domaine à lier (séparés par des virgules)"
+
+# Keep in mind there is a trailing white space here.
+#: google_analytics/inc-config.php:43 google_analytics/inc-config.php:77
+#: google_analytics/inc-config.php:126 google_analytics/inc-config.php:143
+#: google_analytics/inc-config.php:160 google_analytics/inc-config.php:176
+#: google_analytics/inc-config.php:194 google_analytics/inc-config.php:210
+#: google_analytics/inc-config.php:226
+msgid "For more technical information, visit "
+msgstr "Pour plus d'informations (techniques), veuillez visiter "
+
+#: google_analytics/inc-config.php:65
+msgid "Enable administrator tracking"
+msgstr "Activer le suivi des administrateurs"
+
+#: google_analytics/inc-config.php:68
+msgid ""
+"Allows you to track administrator users logged in. As administrators can "
+"generate lots of gallery page hits (administration pages are not tracked), "
+"it might be wise to ignore them from the production statistics. Be aware "
+"that enabling this option will hide the tracking code from the gallery page."
+msgstr ""
+"Vous permet de suivre les utilisateurs connectés ayant le statut "
+"d'administrateur. Comme les administrateurs sont susceptible de générer "
+"beaucoup de traffic sur la galerie (les pages de l'espace d'administration "
+"ne sont pas suivies), il est généralement recommandé de les ignorer pour un "
+"site en production. Notez bien qu'activer cette option cachera l'appel au "
+"code de suivi sur toutes les pages."
+
+#: google_analytics/inc-config.php:73
+#, fuzzy
+msgid "Enable page view tracking"
+msgstr "Enable page view tracking"
+
+#: google_analytics/inc-config.php:76
+#, fuzzy
+msgid ""
+"Allows you to enable or disable per-page tracking. You will still be able to "
+"track image views, but with less details."
+msgstr ""
+"Allows you to enable or disable per-page tracking. You will still be able to "
+"track image views, but with less details."
+
+#: google_analytics/inc-config.php:82
+#, fuzzy
+msgid "Position of the page tracking code"
+msgstr "Position of the page tracking code"
+
+#: google_analytics/inc-config.php:86 google_analytics/inc-config.php:91
+#: google_analytics/inc-config.php:110 google_analytics/inc-config.php:115
+#, fuzzy
+msgid "HTML header"
+msgstr "HTML header"
+
+#: google_analytics/inc-config.php:87 google_analytics/inc-config.php:92
+#: google_analytics/inc-config.php:111 google_analytics/inc-config.php:116
+#, fuzzy
+msgid "HTML body opening"
+msgstr "HTML body opening"
+
+#: google_analytics/inc-config.php:88 google_analytics/inc-config.php:93
+#: google_analytics/inc-config.php:112 google_analytics/inc-config.php:117
+#, fuzzy
+msgid "HTML body closing"
+msgstr "HTML body closing"
+
+#: google_analytics/inc-config.php:90
+#, fuzzy
+msgid ""
+"Allows you to select where the page tracking code will be inserted. Possible "
+"choices are:"
+msgstr ""
+"Allows you to select where the page tracking code will be inserted. Possible "
+"choices are:"
+
+#: google_analytics/inc-config.php:98
+#, fuzzy
+msgid "Enable image view tracking"
+msgstr "Enable image view tracking"
+
+#: google_analytics/inc-config.php:101
+#, fuzzy
+msgid ""
+"Allows you to track hits on images displayed through the colorbox library."
+msgstr ""
+"Allows you to track hits on images displayed through the colorbox library."
+
+#: google_analytics/inc-config.php:106
+#, fuzzy
+msgid "Position of the image tracking code"
+msgstr "Position of the image tracking code"
+
+#: google_analytics/inc-config.php:114
+#, fuzzy
+msgid ""
+"Allows you to select where the image tracking code will be inserted. "
+"Possible choices are:"
+msgstr ""
+"Allows you to select where the image tracking code will be inserted. "
+"Possible choices are:"
+
+#: google_analytics/inc-config.php:122
+#, fuzzy
+msgid "Always send referrer information"
+msgstr "Always send referrer information"
+
+#: google_analytics/inc-config.php:125
+#, fuzzy
+msgid ""
+"By default, the referrer information is only transmitted if the domain is "
+"different. Enabling this option will force the referrer to be sent in any "
+"case. Useful if you want to track sub-domain links."
+msgstr ""
+"By default, the referrer information is only transmitted if the domain is "
+"different. Enabling this option will force the referrer to be sent in any "
+"case. Useful if you want to track sub-domain links."
+
+#: google_analytics/inc-config.php:138
+#, fuzzy
+msgid "Page load sample rate"
+msgstr "Page load sample rate"
+
+#: google_analytics/inc-config.php:142
+#, fuzzy
+msgid ""
+"Controls the sample rate (i.e. percentage of sampled visits) of the page. "
+"You can keep a safe 100% in most cases, only reduce it if you have a high "
+"traffic website and the Universal Analytics processing speed cannot cope "
+"with your visitors volume."
+msgstr ""
+"Controls the sample rate (i.e. percentage of sampled visits) of the page. "
+"You can keep a safe 100% in most cases, only reduce it if you have a high "
+"traffic website and the Universal Analytics processing speed cannot cope "
+"with your visitors volume."
+
+#: google_analytics/inc-config.php:155
+#, fuzzy
+msgid "Page load speed sample rate"
+msgstr "Page load speed sample rate"
+
+#: google_analytics/inc-config.php:159
+#, fuzzy, php-format
+msgid ""
+"Controls the sample rate used for page load speed measurement. Note that "
+"Google will only consider the greater of 10k hits or 1% of your visitors to "
+"keep a fair distribution of resources."
+msgstr ""
+"Controls the sample rate used for page load speed measurement. Note that "
+"Google will only consider the greater of 10k hits or 1% of your visitors to "
+"keep a fair distribution of resources."
+
+#: google_analytics/inc-config.php:172
+#, fuzzy
+msgid "Enable IP anonymization"
+msgstr "Enable IP anonymization"
+
+#: google_analytics/inc-config.php:175
+#, fuzzy
+msgid "When present, the IP address of the sender will be anonymized."
+msgstr "When present, the IP address of the sender will be anonymized."
+
+#: google_analytics/inc-config.php:190
+#, fuzzy
+msgid "Force use of SSL beacons"
+msgstr "Force use of SSL beacons"
+
+#: google_analytics/inc-config.php:193
+#, fuzzy
+msgid ""
+"By default, tracking beacons sent from https pages will be sent using https "
+"while beacons sent from http pages will be sent using http. Setting forceSSL "
+"to true will force http pages to also send all beacons using https."
+msgstr ""
+"By default, tracking beacons sent from https pages will be sent using https "
+"while beacons sent from http pages will be sent using http. Setting forceSSL "
+"to true will force http pages to also send all beacons using https."
+
+#: google_analytics/inc-config.php:206
+msgid "Enable Demographics tracking"
+msgstr "Activer le suivi démographique avancé"
+
+#: google_analytics/inc-config.php:209
+#, fuzzy
+msgid ""
+"Demographics and Interest Reports make Age, Gender, and Interest data "
+"available so you can better understand who your users are."
+msgstr ""
+"Demographics and Interest Reports make Age, Gender, and Interest data "
+"available so you can better understand who your users are."
+
+#: google_analytics/inc-config.php:222
+#, fuzzy
+msgid "Enable enhanced link attribution"
+msgstr "Enable enhanced link attribution"
+
+#: google_analytics/inc-config.php:225
+#, fuzzy
+msgid ""
+"Enable better tracking of links by Google. This allow for instance to "
+"differentiate multiple links targetting the same page."
+msgstr ""
+"Enable better tracking of links by Google. This allow for instance to "
+"differentiate multiple links targetting the same page."
+
+#~ msgid ""
+#~ "Controls if you want Universal Analytics to track administrator users "
+#~ "logged in."
+#~ msgstr ""
+#~ "Permet d'activer Universal Analytics pour les utilisateurs connectés "
+#~ "ayant un statut d'administrateur."
